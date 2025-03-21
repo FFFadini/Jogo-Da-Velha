@@ -1,0 +1,291 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h> // Para usar a função isdigit
+
+int main() {
+    // Estrutura do jogo da velha
+    char jogo[3][3];
+    int l, c, linha, coluna, jogador, ganhou, opcao, verificarImpresao, vitoria;
+    char entrada[100]; // Buffer para ler a entrada do usuário
+    int jogadas; // Contador de jogadas
+
+    do {
+        // Inicialização do jogo
+        jogador = 1;
+        ganhou = 0;
+        vitoria = 0;
+        jogadas = 0;
+        verificarImpresao = 0;
+
+        // Preenchendo o tabuleiro com espaços vazios
+        for (l = 0; l < 3; l++) {
+            for (c = 0; c < 3; c++) {
+                jogo[l][c] = ' ';
+            }
+        }
+
+        do {
+            // Exibindo o tabuleiro
+            printf("\n\n\t C   C   C  \n");
+            printf("\t 0   1   2  \n\n"); // Numeração das colunas
+            for (l = 0; l < 3; l++) {
+                for (c = 0; c < 3; c++) {
+                    if (c == 0) {
+                        printf("\t");
+                    }
+                    printf(" %c ", jogo[l][c]);
+                    if (c < 2) {
+                        printf("|");
+                    }
+                    if (c == 2) {
+                        printf("  %d L", l); // Numeração das linhas
+                    }
+                }
+                if (l < 2) {
+                    printf("\n\t-----------");
+                }
+                printf("\n");
+            }
+
+            // Solicitação da jogada
+            while (1) {
+                printf("\nJOGADOR %d: Digite a linha(L) e a coluna(C) que deseja jogar (ex: 1 2): ", jogador);
+                fgets(entrada, sizeof(entrada), stdin); // Lê a entrada como string
+
+                // Tenta extrair dois números da entrada
+                int resultado = sscanf(entrada, "%d %d", &linha, &coluna);
+
+                // Verifica se a leitura foi bem-sucedida e se os valores estão dentro do intervalo
+                if (resultado == 2 && linha >= 0 && linha <= 2 && coluna >= 0 && coluna <= 2 && jogo[linha][coluna] == ' ') {
+                    break; // Entrada válida, sai do loop
+                } else {
+                    printf("Entrada invalida! Digite dois numeros entre 0 e 2, separados por espaço (ex: 1 2).\n");
+                }
+            }
+
+            // Realizando a jogada
+            if (jogador == 1) {
+                jogo[linha][coluna] = '0';
+                jogador = 2;
+            } else {
+                jogo[linha][coluna] = 'X';
+                jogador = 1;
+            }
+            jogadas++;
+
+            // Verificação de vitória
+            // Linha
+            if (jogo[0][0] == '0' && jogo[0][1] == '0' && jogo[0][2] == '0' || //condiçao de vitoria por linha Jogador 1
+                jogo[1][0] == '0' && jogo[1][1] == '0' && jogo[1][2] == '0' ||
+                jogo[2][0] == '0' && jogo[2][1] == '0' && jogo[2][2] == '0') {
+                printf("\n\n");
+                for (l = 0; l < 3; l++) {
+                    for (c = 0; c < 3; c++) {
+                        if (c == 0) {
+                            printf("\t");
+                        }
+                        printf(" %c ", jogo[l][c]);
+                        if (c < 2) {
+                            printf("|");
+                        }
+                    }
+                    if (l < 2) {
+                        printf("\n\t-----------");
+                    }
+                    printf("\n");
+                }
+                printf("\nParabens o JOGADOR 1 Venceu por Linha!!!\n");
+                vitoria = 1;
+            }
+            if (jogo[0][0] == 'X' && jogo[0][1] == 'X' && jogo[0][2] == 'X' || //condiçao de vitoria por linha Jogador 2
+                jogo[1][0] == 'X' && jogo[1][1] == 'X' && jogo[1][2] == 'X' ||
+                jogo[2][0] == 'X' && jogo[2][1] == 'X' && jogo[2][2] == 'X') {
+           		printf("\n\n");
+                for (l = 0; l < 3; l++) {
+                    for (c = 0; c < 3; c++) {
+                        if (c == 0) {
+                            printf("\t");
+                        }
+                        printf(" %c ", jogo[l][c]);
+                        if (c < 2) {
+                            printf("|");
+                        }
+                    }
+                    if (l < 2) {
+                        printf("\n\t-----------");
+                    }
+                    printf("\n");
+                }
+                printf("\nParabens o JOGADOR 2 Venceu por Linha!!!\n");
+                vitoria = 1;
+            }
+
+            // Coluna
+            if (jogo[0][0] == '0' && jogo[1][0] == '0' && jogo[2][0] == '0' || //condiçao de vitoria por coluna Jogador 1
+                jogo[0][1] == '0' && jogo[1][1] == '0' && jogo[2][1] == '0' ||
+                jogo[0][2] == '0' && jogo[1][2] == '0' && jogo[2][2] == '0') {
+                printf("\n\n");
+                for (l = 0; l < 3; l++) {
+                    for (c = 0; c < 3; c++) {
+                        if (c == 0) {
+                            printf("\t");
+                        }
+                        printf(" %c ", jogo[l][c]);
+                        if (c < 2) {
+                            printf("|");
+                        }
+                    }
+                    if (l < 2) {
+                        printf("\n\t-----------");
+                    }
+                    printf("\n");
+                }
+                printf("\nParabens o JOGADOR 1 Venceu por Coluna!!!\n");
+                vitoria = 1;
+            }
+            if (jogo[0][0] == 'X' && jogo[1][0] == 'X' && jogo[2][0] == 'X' || //condiçao de vitoria por coluna Jogador 2
+                jogo[0][1] == 'X' && jogo[1][1] == 'X' && jogo[2][1] == 'X' ||
+                jogo[0][2] == 'X' && jogo[1][2] == 'X' && jogo[2][2] == 'X') {
+                printf("\n\n");
+				for (l = 0; l < 3; l++) {
+                    for (c = 0; c < 3; c++) {
+                        if (c == 0) {
+                            printf("\t");
+                        }
+                        printf(" %c ", jogo[l][c]);
+                        if (c < 2) {
+                            printf("|");
+                        }
+                    }
+                    if (l < 2) {
+                        printf("\n\t-----------");
+                    }
+                    printf("\n");
+                }
+                printf("\nParabens o JOGADOR 2 Venceu por Coluna!!!\n");
+                vitoria = 1;
+            }
+
+            // Diagonal principal
+            if (jogo[0][0] == '0' && jogo[1][1] == '0' && jogo[2][2] == '0') {
+                printf("\n\n");
+				for (l = 0; l < 3; l++) {
+                    for (c = 0; c < 3; c++) {
+                        if (c == 0) {
+                            printf("\t");
+                        }
+                        printf(" %c ", jogo[l][c]);
+                        if (c < 2) {
+                            printf("|");
+                        }
+                    }
+                    if (l < 2) {
+                        printf("\n\t-----------");
+                    }
+                    printf("\n");
+                }
+                printf("\nParabens o JOGADOR 1 Venceu na Diagonal Principal!!!\n");
+                vitoria = 1;
+            }
+            if (jogo[0][0] == 'X' && jogo[1][1] == 'X' && jogo[2][2] == 'X') {
+                printf("\n\n");
+				for (l = 0; l < 3; l++) {
+                    for (c = 0; c < 3; c++) {
+                        if (c == 0) {
+                            printf("\t");
+                        }
+                        printf(" %c ", jogo[l][c]);
+                        if (c < 2) {
+                            printf("|");
+                        }
+                    }
+                    if (l < 2) {
+                        printf("\n\t-----------");
+                    }
+                    printf("\n");
+                }
+                printf("\nParabens o JOGADOR 2 Venceu na Diagonal Principal!!!\n");
+                vitoria = 1;
+            }
+
+            // Diagonal secundária
+            if (jogo[0][2] == '0' && jogo[1][1] == '0' && jogo[2][0] == '0') {
+                printf("\n\n");
+				for (l = 0; l < 3; l++) {
+                    for (c = 0; c < 3; c++) {
+                        if (c == 0) {
+                            printf("\t");
+                        }
+                        printf(" %c ", jogo[l][c]);
+                        if (c < 2) {
+                            printf("|");
+                        }
+                    }
+                    if (l < 2) {
+                        printf("\n\t-----------");
+                    }
+                    printf("\n");
+                }
+                printf("\nParabens o JOGADOR 1 Venceu na Diagonal Secundaria!!!\n");
+                vitoria = 1;
+                
+            }
+            if (jogo[0][2] == 'X' && jogo[1][1] == 'X' && jogo[2][0] == 'X') {
+                printf("\n\n");
+				for (l = 0; l < 3; l++) {
+                    for (c = 0; c < 3; c++) {
+                        if (c == 0) {
+                            printf("\t");
+                        }
+                        printf(" %c ", jogo[l][c]);
+                        if (c < 2) {
+                            printf("|");
+                        }
+                    }
+                    if (l < 2) {
+                        printf("\n\t-----------");
+                    }
+                    printf("\n");
+                }
+                printf("\nParabens o JOGADOR 2 Venceu na Diagonal Secundaria!!!\n");
+                vitoria = 1;
+            }  
+			
+			if(vitoria == 1){
+				ganhou = 1;
+                break;
+			}    
+
+        } while (jogadas < 9 && ganhou == 0);
+
+        // Verificação de empate
+        if (ganhou == 0) {
+        	printf("\n\n");
+        	for (l = 0; l < 3; l++) {
+                    for (c = 0; c < 3; c++) {
+                        if (c == 0) {
+                            printf("\t");
+                        }
+                        printf(" %c ", jogo[l][c]);
+                        if (c < 2) {
+                            printf("|");
+                        }
+                    }
+                    if (l < 2) {
+                        printf("\n\t-----------");
+                    }
+                    printf("\n");
+                }
+            printf("\nO jogo deu Velha, sem ganhador!!!\n");
+        }
+
+        // Perguntar se deseja jogar novamente
+        printf("\nDigite (1) para jogar novamente e (2) para parar: ");
+        scanf("%d", &opcao);
+        
+        while (getchar() != '\n'); // Limpa o buffer de entrada após o scanf
+    } while (opcao == 1);
+    
+    return 0;
+}
